@@ -1,0 +1,29 @@
+{
+  "name": "comment-youtube",
+  "version": "1.0.0",
+  "description": "A website to comment all youtube videos, even the comment forbidden videos",
+  "main": "serv.js",
+  "scripts": {
+    "start": "npx tsc && node --trace-warnings serv.js",
+    "watch": "npx tsc -w",
+    "build": "npx tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AutoCoderr/commentYoutube.git"
+  },
+  "author": "AutoCoderr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AutoCoderr/commentYoutube/issues"
+  },
+  "homepage": "https://github.com/AutoCoderr/commentYoutube#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sequelize": "^6.6.5",
+    "pg": "^8.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
+}
