@@ -4,6 +4,14 @@ import User from "./User";
 
 const {DB_PREFIX} = process.env;
 
+export interface IComment {
+    id?: number;
+    content: string;
+    User: User;
+    created_at: Date;
+    updated_at: Date;
+}
+
 export default class Comment extends Model {
     public id!: number;
     public content!: string;

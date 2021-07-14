@@ -3,13 +3,22 @@ import { sequelize } from "../DB";
 
 const {DB_PREFIX} = process.env;
 
+export interface IUser {
+    id?: number;
+    email?: string;
+    type: 'anon'|'google';
+    firstname: string;
+    lastname: string;
+    profile_pic_uri?: string;
+}
+
 export default class User extends Model {
     public id!: number;
     public email?: string;
     public type!: 'anon'|'google';
     public firstname!: string;
     public lastname!: string;
-    public profile_pic_uri!: string;
+    public profile_pic_uri?: string;
 }
 
 User.init(
@@ -38,7 +47,7 @@ User.init(
         },
         profile_pic_uri: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         }
     },
     {

@@ -1,9 +1,14 @@
 import {migrate} from "./lib/Migration";
+import express from 'express';
+import SessionRouter from "./routes/SessionRoute";
 
 migrate().then(() => console.log("Migration effectuée!"));
 
-console.log(process.env.GOOGLE_CLIENT_ID);
+const app = express();
 
-setTimeout(() => {
-    process.exit();
-}, 1000*60*5);
+app.use(express.json());
+app.use(express.urlencoded());
+
+app.use('/session', SessionRouter);
+
+app.listen(81);

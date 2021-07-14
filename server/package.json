@@ -23,7 +23,8 @@
     "express": "^4.17.1",
     "pg": "^8.6.0",
     "sequelize": "^6.6.5",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "typescript": "^4.3.5"
