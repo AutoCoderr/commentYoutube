@@ -6,6 +6,7 @@ const {DB_PREFIX} = process.env;
 
 export interface IComment {
     id?: number;
+    yvideo_id: string;
     content: string;
     User: User;
     created_at: Date;
@@ -14,6 +15,7 @@ export interface IComment {
 
 export default class Comment extends Model {
     public id!: number;
+    public yvideo_id!: string;
     public content!: string;
     public User!: User;
     public created_at!: Date;
@@ -26,6 +28,10 @@ Comment.init(
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
+            allowNull: false
+        },
+        yvideo_id: {
+            type: DataTypes.STRING,
             allowNull: false
         },
         content: {
