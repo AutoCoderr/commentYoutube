@@ -1,4 +1,6 @@
-console.log("COUCOU");
+import {migrate} from "./lib/Migration";
+
+migrate().then(() => console.log("Migration effectuée!"));
 
 console.log(process.env.GOOGLE_CLIENT_ID);
 

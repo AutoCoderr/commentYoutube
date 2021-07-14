@@ -17,7 +17,7 @@ services:
     volumes:
     - ./server:/server
     working_dir: /server
-    command: npm start
+    command: npm run watch
     ports:
     - '81:81'
     env_file:
