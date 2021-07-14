@@ -1,11 +1,25 @@
 version: "3.4"
 services:
+
+  client:
+    image: node:14
+    volumes:
+    - ./client:/client
+    working_dir: /client
+    command: npm start
+    ports:
+    - '80:3000'
+    networks:
+      - exterior
+
   server:
     image: node:14
     volumes:
     - ./server:/server
     working_dir: /server
     command: npm start
+    ports:
+    - '81:81'
     env_file:
       - .env
     networks:
