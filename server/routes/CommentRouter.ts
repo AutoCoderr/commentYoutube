@@ -1,6 +1,6 @@
 import {Router} from "express";
 import checkVideoExist from "../lib/checkVideoExist";
-import Comment, {IComment} from "../models/Comment";
+import Comment from "../models/Comment";
 import JWTMiddleWare from "../middlewares/JWTMiddleWare";
 import User from "../models/User";
 import getOrCreateUser from "../lib/getOrCreateUser";
@@ -38,10 +38,28 @@ CommentRouter.get("/:ytvideo_id", (req,res) => {
         limit: nbCommentByPage,
         include: User
     })
-        .then((comments: Array<IComment>) =>
+        .then((comments) =>
             Comment.count().then(count => res.json({count,nbCommentByPage,comments}) )
         )
         .catch(_ => res.sendStatus(500))
 });
+
+CommentRouter.delete("/:id", (req,res) => {
+    Comment.findOne({
+        where: {id: req.params.id}
+    })
+        .then((comment) =>
+        comment == null ?
+            res.sendStatus(404) :
+            comment.UserId != req.user.id ?
+                res.sendStatus(403) :
+                Comment.destroy({
+                  where: {id: req.params.id}
+                })
+                    .then(_ => res.sendStatus(204))
+                    .catch(_ => res.sendStatus(500))
+    )
+        .catch(_ => res.sendStatus(500))
+})
 
 export default CommentRouter;

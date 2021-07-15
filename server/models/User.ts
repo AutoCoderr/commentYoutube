@@ -10,7 +10,7 @@ export interface IUser {
     type: 'anon'|'google';
     firstname: string;
     lastname: string;
-    Comments: Array<IComment>;
+    Comments?: Array<IComment>;
     profile_pic_uri?: string;
 }
 
@@ -20,7 +20,7 @@ export default class User extends Model {
     public type!: 'anon'|'google';
     public firstname!: string;
     public lastname!: string;
-    public Comments!: Array<IComment>;
+    public Comments?: Array<IComment>;
     public profile_pic_uri?: string;
 }
 

@@ -9,6 +9,7 @@ export interface IComment {
     ytvideo_id: string;
     content: string;
     User: IUser;
+    UserId: number;
     created_at: Date;
     updated_at: Date;
 }
@@ -18,6 +19,7 @@ export default class Comment extends Model {
     public ytvideo_id!: string;
     public content!: string;
     public User!: IUser;
+    public UserId!: number;
     public created_at!: Date;
     public updated_at!: Date;
 }
