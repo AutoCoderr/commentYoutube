@@ -10,8 +10,8 @@ export interface IComment {
     content: string;
     User: IUser;
     UserId: number;
-    created_at: Date;
-    updated_at: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export default class Comment extends Model {
@@ -20,8 +20,8 @@ export default class Comment extends Model {
     public content!: string;
     public User!: IUser;
     public UserId!: number;
-    public created_at!: Date;
-    public updated_at!: Date;
+    public createdAt!: Date;
+    public updatedAt!: Date;
 }
 
 Comment.init(

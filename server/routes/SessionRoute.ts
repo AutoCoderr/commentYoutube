@@ -14,7 +14,7 @@ SessionRouter.post('/login-anon', (req,res) => {
     }
     res.json({
         ...user,
-        token: jwt.sign(user, process.env.JWT_SECRET)
+        token: jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1 hour' })
     });
 });
 
