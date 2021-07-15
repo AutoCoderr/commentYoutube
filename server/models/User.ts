@@ -1,31 +1,33 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../DB";
+import {IComment} from "./Comment";
 
 const {DB_PREFIX} = process.env;
 
 export interface IUser {
-    id?: number;
+    id?: string;
     email?: string;
     type: 'anon'|'google';
     firstname: string;
     lastname: string;
+    Comments: Array<IComment>;
     profile_pic_uri?: string;
 }
 
 export default class User extends Model {
-    public id!: number;
+    public id!: string;
     public email?: string;
     public type!: 'anon'|'google';
     public firstname!: string;
     public lastname!: string;
+    public Comments!: Array<IComment>;
     public profile_pic_uri?: string;
 }
 
 User.init(
     {
         id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
+            type: DataTypes.STRING,
             primaryKey: true,
             allowNull: false
         },

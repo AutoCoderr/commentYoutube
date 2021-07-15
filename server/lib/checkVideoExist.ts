@@ -1,10 +1,16 @@
 import https from "https";
 
-export default function checkVideoExist(yvideo_id) {
+const existsVideos = {};
+
+export default function checkVideoExist(ytvideo_id) {
     return new Promise(resolve => {
+        if (existsVideos[ytvideo_id]) {
+            resolve(true);
+            return;
+        }
         const yrequest = https.request({
             host: 'www.youtube.com',
-            path: '/watch?v='+yvideo_id
+            path: '/watch?v='+ytvideo_id
         },yres => {
             let data: any = [];
             yres.on("data", chunk => data.push(chunk));
@@ -35,7 +41,12 @@ export default function checkVideoExist(yvideo_id) {
                     obj += data[i];
                     i++;
                 }
-                resolve(JSON.parse(obj).playabilityStatus.status == "OK");
+                let exist = false;
+                try {
+                    exist = JSON.parse(obj).playabilityStatus.status == "OK";
+                } catch (e) {}
+                existsVideos[ytvideo_id] = exist;
+                resolve(exist);
             });
         });
         yrequest.end();

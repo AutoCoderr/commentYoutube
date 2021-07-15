@@ -7,7 +7,7 @@ const SessionRouter = Router();
 
 SessionRouter.post('/login-anon', (req,res) => {
     const user: IUser = {
-        id: rand(0,10**10),
+        id: new Date().getTime().toString()+"_"+rand(1000,9999),
         type: "anon",
         firstname: "anon",
         lastname: rand(1,1000)

@@ -1,23 +1,23 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../DB";
-import User from "./User";
+import User,{IUser} from "./User";
 
 const {DB_PREFIX} = process.env;
 
 export interface IComment {
     id?: number;
-    yvideo_id: string;
+    ytvideo_id: string;
     content: string;
-    User: User;
+    User: IUser;
     created_at: Date;
     updated_at: Date;
 }
 
 export default class Comment extends Model {
     public id!: number;
-    public yvideo_id!: string;
+    public ytvideo_id!: string;
     public content!: string;
-    public User!: User;
+    public User!: IUser;
     public created_at!: Date;
     public updated_at!: Date;
 }
@@ -30,7 +30,7 @@ Comment.init(
             primaryKey: true,
             allowNull: false
         },
-        yvideo_id: {
+        ytvideo_id: {
             type: DataTypes.STRING,
             allowNull: false
         },
