@@ -9,6 +9,44 @@ const CommentRouter = Router();
 
 CommentRouter.use(JWTMiddleWare);
 
+CommentRouter.post('/reply/:id', (req,res) =>
+    (req.body.content == undefined || req.body.content.trim() == "") ?
+        res.sendStatus(400) :
+        getOrCreateUser(req.user).then(user =>
+            Comment.findOne({
+                where: {id: req.params.id}
+            })
+                .then(comment =>
+                    comment == null ?
+                        res.sendStatus(404) :
+                        new Comment({
+                            ytvideo_id: comment.ytvideo_id,
+                            content: req.body.content,
+                            UserId: user.id,
+                            ParentId: comment.id
+                        }).save()
+                            .then(_ => res.sendStatus(201)) //@ts-ignore
+                            .catch(e => console.error(e) | res.sendStatus(500))
+                ) //@ts-ignore
+                .catch(e => console.error(e) | res.sendStatus(500))
+        )
+)
+
+CommentRouter.get('/reply/:id', (req,res) => {
+    Comment.findOne({
+        where: {id: req.params.id},
+        order: [
+            [{model: Comment, as: 'children'}, 'createdAt', 'ASC']
+        ],
+        include: {model: Comment, as: 'children'}
+    })
+        .then(comment =>
+            comment == null ?
+                res.sendStatus(404) :
+                res.json(comment.children)
+        )
+});
+
 CommentRouter.post('/:ytvideo_id', async (req,res) => {
     if (req.body.content == undefined || req.body.content.trim() == "") {
         res.sendStatus(400);
@@ -34,17 +72,34 @@ CommentRouter.get("/:ytvideo_id", (req,res) => {
     const page = req.query.page && parseInt(req.query.page).toString() == req.query.page && req.query.page != "NaN" ? parseInt(req.query.page) : 1;
     Comment.findAll({
         where: {
-            ytvideo_id: req.params.ytvideo_id
+            ytvideo_id: req.params.ytvideo_id,
+            ParentId: null
         },
         order: [
             ['createdAt','DESC']
         ],
+        include: [
+            User,
+            {model: Comment, as: 'children', attributes: ['id']}
+        ],
         offset: (page-1)*nbCommentByPage,
         limit: nbCommentByPage,
-        include: User
     })
         .then((comments) =>
-            Comment.count().then(count => res.json({count,nbCommentByPage,comments}) )
+            Comment.count().then(count => res.json({
+                count,
+                nbCommentByPage,
+                comments: comments.map(comment => ({
+                    id: comment.id,
+                    ytvideo_id: comment.ytvideo_id,
+                    content: comment.content,
+                    createdAt: comment.createdAt,
+                    updatedAt: comment.updatedAt,
+                    UserId: comment.UserId,
+                    User: comment.User,
+                    nbReply: comment.children.length
+                }))
+            }))
         ) // @ts-ignore
         .catch(e => console.error(e) | res.sendStatus(500))
 });

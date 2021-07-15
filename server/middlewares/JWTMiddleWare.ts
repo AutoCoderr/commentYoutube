@@ -19,7 +19,7 @@ export default function JWTMiddleWare(req,res,next) {
     jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
         if (err) {
             console.error(err);
-            res.sendStatus(500);
+            res.sendStatus(403);
         } else {
             req.user = decodedToken;
             next();

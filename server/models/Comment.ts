@@ -10,6 +10,9 @@ export interface IComment {
     content: string;
     User: IUser;
     UserId: number;
+    ParentId: number;
+    parent: IComment;
+    children: Array<IComment>;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -20,6 +23,9 @@ export default class Comment extends Model {
     public content!: string;
     public User!: IUser;
     public UserId!: number;
+    public ParentId!: number;
+    public parent!: IComment;
+    public children!: Array<IComment>;
     public createdAt!: Date;
     public updatedAt!: Date;
 }
@@ -49,3 +55,6 @@ Comment.init(
 
 Comment.belongsTo(User);
 User.hasMany(Comment);
+
+Comment.belongsTo(Comment, {as: 'parent', foreignKey: 'ParentId', onDelete: 'CASCADE'});
+Comment.hasMany(Comment, {as: 'children', foreignKey: 'ParentId', onDelete: 'CASCADE'});
