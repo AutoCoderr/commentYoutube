@@ -1,5 +1,5 @@
 import {Router} from "express";
-import checkVideoExist from "../lib/checkVideoExist";
+import getYTVideo from "../lib/getYTVideo";
 import Comment from "../models/Comment";
 import JWTMiddleWare from "../middlewares/JWTMiddleWare";
 import User from "../models/User";
@@ -53,7 +53,7 @@ CommentRouter.post('/:ytvideo_id', async (req,res) => {
         return;
     }
 
-    if (!await checkVideoExist(req.params.ytvideo_id))
+    if (!await getYTVideo(req.params.ytvideo_id))
         res.sendStatus(404);
     else {
         let user: null|User = await getOrCreateUser(req.user);

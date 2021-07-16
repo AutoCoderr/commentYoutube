@@ -1,8 +1,8 @@
 import https from "https";
 
-const existsVideos = {};
+const videosCache = {};
 
-export default function checkVideoExist(ytvideo_id) {
+export default function getYTVideo(ytvideo_id) {
     return new Promise(resolve => {
         if (ytvideo_id.length < 11) {
             resolve(false);
@@ -10,8 +10,8 @@ export default function checkVideoExist(ytvideo_id) {
         } else if (ytvideo_id.length > 11)
             ytvideo_id = ytvideo_id.substring(0,11);
 
-        if (existsVideos[ytvideo_id] != undefined) {
-            resolve(existsVideos[ytvideo_id]);
+        if (videosCache[ytvideo_id] != undefined) {
+            resolve(videosCache[ytvideo_id]);
             return;
         }
         const yrequest = https.request({
@@ -47,12 +47,22 @@ export default function checkVideoExist(ytvideo_id) {
                     obj += data[i];
                     i++;
                 }
-                let exist = false;
+                let res: any = false;
+                let json: any = null
                 try {
-                    exist = JSON.parse(obj).playabilityStatus.status == "OK";
+                    json = JSON.parse(obj)
+                    res = json.playabilityStatus.status == "OK" ?
+                        {
+                            title: json.videoDetails.title,
+                            views: json.videoDetails.viewCount,
+                            author: json.videoDetails.author,
+                            channelId: json.videoDetails.channelId,
+                            description: json.videoDetails.shortDescription
+                        }/*json*/ :
+                        false;
                 } catch (e) {}
-                existsVideos[ytvideo_id] = exist;
-                resolve(exist);
+                videosCache[ytvideo_id] = res;
+                resolve(res);
             });
         });
         yrequest.end();

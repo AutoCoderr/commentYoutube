@@ -1,24 +1,50 @@
 import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter, Link, Route} from "react-router-dom";
+import React from 'react';
+import {SessionProvider,SessionContext} from "./contexts/SessionContext";
+import Watch from "./components/Watch";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+    return (
+      <BrowserRouter>
+        <header>
+          <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <div className="container-fluid">
+              <a className="navbar-brand">Comment Youtube</a>
+              <div className="d-flex">
+                <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
+                    <SessionProvider>
+                        <SessionContext.Consumer>
+                          { session =>
+                                session != null && session.type === "google" ?
+                                    (<>
+                                      <li className="nav-item">
+                                        <a className="nav-link active" aria-current="page" href="#">Passer en anonyme</a>
+                                      </li>
+                                    </>)
+                                    :
+                                    (<>
+                                      <li className="nav-item">
+                                        <a className="nav-link active" aria-current="page" href="#">Connexion Google</a>
+                                      </li>
+                                    </>)
+                          }
+                        </SessionContext.Consumer>
+                    </SessionProvider>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
+        <main>
+            <SessionProvider>
+                <Route exact path="/watch" component={Watch}/>
+            </SessionProvider>
+        </main>
+
+      </BrowserRouter>
   );
 }
 
