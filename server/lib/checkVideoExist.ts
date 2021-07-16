@@ -4,8 +4,14 @@ const existsVideos = {};
 
 export default function checkVideoExist(ytvideo_id) {
     return new Promise(resolve => {
-        if (existsVideos[ytvideo_id]) {
-            resolve(true);
+        if (ytvideo_id.length < 11) {
+            resolve(false);
+            return;
+        } else if (ytvideo_id.length > 11)
+            ytvideo_id = ytvideo_id.substring(0,11);
+
+        if (existsVideos[ytvideo_id] != undefined) {
+            resolve(existsVideos[ytvideo_id]);
             return;
         }
         const yrequest = https.request({
