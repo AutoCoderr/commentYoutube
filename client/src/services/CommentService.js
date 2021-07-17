@@ -9,14 +9,14 @@ export default class CommentService {
             .then(res => res.json())
     }
 
-    static sendComment(YTVideoId,content,token) {
-        return SessionService.checkIfTokenExpired(token,token =>
+    static sendComment(YTVideoId,content,session) {
+        return SessionService.checkIfTokenExpired(session,session =>
             fetch(apiPath+"/"+YTVideoId, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
                 },
-                body: RequestService.formatUrlEncoded({content,token})
+                body: RequestService.formatUrlEncoded({content,token: session.token})
             })
         )
     }

@@ -14,13 +14,13 @@ export default class SessionService {
         this.reConnect = callback;
     }
 
-    static checkIfTokenExpired(token,request) {
+    static checkIfTokenExpired(session,request) {
         return new Promise(resolve =>
-            request(token).then(res =>
+            request(session).then(res =>
                 res.status === 401 ?
-                    this.reConnect((token) =>
-                        request(token).then(res => resolve(res))
-                    ) : resolve(res)
+                    this.reConnect((session) =>
+                        request(session).then(res => resolve({res,session}))
+                    ) : resolve({res,session})
             )
         )
     }

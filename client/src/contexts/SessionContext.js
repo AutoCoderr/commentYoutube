@@ -22,7 +22,7 @@ export function SessionProvider({children}) {
 
         SessionService.onExpire(callback => {
             SessionService.loginAnon()
-                .then(anonSession => setSession(anonSession) | localStorage.setItem('session',JSON.stringify(anonSession)) | callback(anonSession.token))
+                .then(anonSession => setSession(anonSession) | localStorage.setItem('session',JSON.stringify(anonSession)) | callback(anonSession))
                 .catch(e => console.error(e));
         });
     }, []);

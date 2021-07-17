@@ -14,16 +14,16 @@ export function CommentProvider({children}) {
 
     const date = new Date();
 
-    const addComment = (content,user) =>
-        CommentService.sendComment(ytvideo_id,content,user.token).then(_ =>
+    const addComment = (content,session) =>
+        CommentService.sendComment(ytvideo_id,content,session).then(({session}) =>
             setComments([{
                 id: comments.length+1,
                 ytvideo_id,
                 content,
                 createdAt: date,
                 updatedAt: date,
-                UserId: user.id,
-                User: user,
+                UserId: session.id,
+                User: session,
                 nbReply: 0
             }, ...comments]) | setCommentCount(commentCount+1)
         );
