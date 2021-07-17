@@ -19,7 +19,13 @@ export function SessionProvider({children}) {
                 .then(anonSession => setSession(anonSession) | localStorage.setItem('session',JSON.stringify(anonSession)))
                 .catch(e => console.error(e));
         }
-    }, [])
+
+        SessionService.onExpire(callback => {
+            SessionService.loginAnon()
+                .then(anonSession => setSession(anonSession) | localStorage.setItem('session',JSON.stringify(anonSession)) | callback(anonSession.token))
+                .catch(e => console.error(e));
+        });
+    }, []);
 
 
     return (
