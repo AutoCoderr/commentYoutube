@@ -13,6 +13,8 @@ services:
       - exterior
 
   server:
+    depends_on:
+      - db
     image: node:14
     volumes:
     - ./server:/server
@@ -32,6 +34,10 @@ services:
       - db_data:/var/lib/postgresql/data:rw
     env_file:
       - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
       - '5432:5432'
     networks:
