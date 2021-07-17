@@ -28,21 +28,29 @@ export default class VideoService {
     }
     static computeDescriptionWord(word) {
         if (linkRegex.test(word)) {
-            let link = word.match(linkRegex);
-            link = link[0]
+            const link = word.match(linkRegex);
 
-            let i = 0;
-            while (i < word.length-link.length && word.substring(i,i+link.length) !== link) {
-                i ++;
-            }
-            let beginI = i;
-            let endI = beginI+link.length;
+            const beginI = link.index;
+            const endI = beginI+link[0].length;
 
-            let toAddBefore = word.substring(0,beginI).split("");
-            let toAddAfter = word.substring(endI).split("");
-            return <>{toAddBefore.length > 0 && toAddBefore}<a href={link} target="_blank">{link}</a>{toAddAfter.length > 0 && toAddAfter}</>;
+            const toAddBefore = word.substring(0,beginI).split("");
+            const toAddAfter = word.substring(endI).split("");
+            return <>{toAddBefore.length > 0 && toAddBefore}<a href={link[0]} target="_blank">{link[0]}</a>{toAddAfter.length > 0 && toAddAfter}</>;
         } else {
             return <>{word}</>;
         }
+    }
+
+    static formatViews(views) {
+        let nbSpaceAdded = 0;
+        views = views.toString();
+        for (let i=views.length-1;i>0;i--) {
+            if ((views.length-i-nbSpaceAdded) % 3 === 0) {
+                views = views.substring(0,i)+" "+views.substring(i);
+                nbSpaceAdded += 1;
+                i -= 1;
+            }
+        }
+        return views;
     }
 }

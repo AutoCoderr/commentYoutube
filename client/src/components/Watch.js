@@ -2,9 +2,13 @@ import React,{useContext,useState,useEffect} from 'react';
 import {SessionContext} from "../contexts/SessionContext";
 import useQuery from "../services/useQuery";
 import VideoService from "../services/VideoService";
+import '../css/watch.css';
 
 function Watch() {
     const session = useContext(SessionContext);
+    const [descriptionCollapsed, setDescriptionCollapsed] = useState(true);
+
+
     let YTVideoId = useQuery().get('v');
     if (YTVideoId.length > 11) {
         YTVideoId = YTVideoId.substring(0, 11);
@@ -23,31 +27,37 @@ function Watch() {
         <div>
             {
                 videoInfos &&
-                <>
+                <div className="video-display">
                     <h1>{videoInfos.title}</h1>
                     <iframe
-                        style={{height: '500px', width: '70%'}}
                         src={"https://www.youtube.com/embed/"+YTVideoId}
                         title="YouTube video player"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                     />
-                    <div>
+                    <div className="video-infos">
                         <span>
-                            {videoInfos.views} vues
+                            { VideoService.formatViews(videoInfos.views)} vues
                         </span>
                         <span>
-                            <a target="_blank" href={"https://www.youtube.com/watch?v="+YTVideoId}>Vidéo sur youtube</a>
+                            <a target="_blank" href={"https://www.youtube.com/watch?v="+YTVideoId}>Aller sur youtube</a>
                         </span>
                         <span>
                             Chaine : <a target="_blank" href={"https://www.youtube.com/channel/"+videoInfos.channelId}>{videoInfos.author}</a>
                         </span>
                     </div>
-                    <p>
-                        {VideoService.computeDescription(videoInfos.description)}
-                    </p>
-                </>
+                    <div className="description">
+                        <p className={descriptionCollapsed ? 'collapsed' : ''}>
+                            {VideoService.computeDescription(videoInfos.description)}
+                        </p>
+                        <a className="show-description-button" onClick={() => setDescriptionCollapsed(!descriptionCollapsed)}>
+                            {
+                                descriptionCollapsed ? 'PLUS' : 'MOINS'
+                            }
+                        </a>
+                    </div>
+                </div>
             }
             {
                 videoInfos === false &&

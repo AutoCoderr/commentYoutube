@@ -11,8 +11,12 @@ export default function getYTVideo(ytvideo_id) {
             ytvideo_id = ytvideo_id.substring(0,11);
 
         if (videosCache[ytvideo_id] != undefined) {
-            resolve(videosCache[ytvideo_id]);
-            return;
+            if (new Date().getTime() - videosCache[ytvideo_id].date.getTime() > 1000*60*10) {
+                delete videosCache[ytvideo_id];
+            } else {
+                resolve(videosCache[ytvideo_id].infos);
+                return;
+            }
         }
         const yrequest = https.request({
             host: 'www.youtube.com',
@@ -47,11 +51,11 @@ export default function getYTVideo(ytvideo_id) {
                     obj += data[i];
                     i++;
                 }
-                let res: any = false;
+                let infos: any = false;
                 let json: any = null
                 try {
                     json = JSON.parse(obj)
-                    res = json.playabilityStatus.status == "OK" ?
+                    infos = json.playabilityStatus.status == "OK" ?
                         {
                             title: json.videoDetails.title,
                             views: json.videoDetails.viewCount,
@@ -61,8 +65,8 @@ export default function getYTVideo(ytvideo_id) {
                         }/*json*/ :
                         false;
                 } catch (e) {}
-                videosCache[ytvideo_id] = res;
-                resolve(res);
+                videosCache[ytvideo_id] = {date: new Date(), infos};
+                resolve(infos);
             });
         });
         yrequest.end();

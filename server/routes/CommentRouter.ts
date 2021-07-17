@@ -19,14 +19,16 @@ CommentRouter.post('/reply/:id', (req,res) =>
                 .then(comment =>
                     comment == null ?
                         res.sendStatus(404) :
-                        new Comment({
-                            ytvideo_id: comment.ytvideo_id,
-                            content: req.body.content,
-                            UserId: user.id,
-                            ParentId: comment.id
-                        }).save()
-                            .then(_ => res.sendStatus(201)) //@ts-ignore
-                            .catch(e => console.error(e) | res.sendStatus(500))
+                        comment.ParentId != null ?
+                            res.sendStatus(403) :
+                                new Comment({
+                                    ytvideo_id: comment.ytvideo_id,
+                                    content: req.body.content,
+                                    UserId: user.id,
+                                    ParentId: comment.id
+                                }).save()
+                                .then(_ => res.sendStatus(201)) //@ts-ignore
+                                .catch(e => console.error(e) | res.sendStatus(500))
                 ) //@ts-ignore
                 .catch(e => console.error(e) | res.sendStatus(500))
         )
