@@ -10,10 +10,6 @@ export default class SessionService {
 
     static reConnect = (callback) => {};
 
-    static onExpire(callback) {
-        this.reConnect = callback;
-    }
-
     static checkIfTokenExpired(session,request) {
         return new Promise(resolve =>
             request(session).then(res =>

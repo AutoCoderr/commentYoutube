@@ -20,11 +20,10 @@ export function SessionProvider({children}) {
                 .catch(e => console.error(e));
         }
 
-        SessionService.onExpire(callback => {
+        SessionService.reConnect = callback =>
             SessionService.loginAnon()
                 .then(anonSession => setSession(anonSession) | localStorage.setItem('session',JSON.stringify(anonSession)) | callback(anonSession))
                 .catch(e => console.error(e));
-        });
     }, []);
 
 

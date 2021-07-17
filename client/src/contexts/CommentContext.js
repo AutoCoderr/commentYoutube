@@ -14,19 +14,28 @@ export function CommentProvider({children}) {
 
     const date = new Date();
 
-    const addComment = (content,session) =>
-        CommentService.sendComment(ytvideo_id,content,session).then(({session}) =>
+    const addComment = (content,session) => content.trim() !== "" &&
+        CommentService.sendComment(ytvideo_id,content,session)
+            .then(async ({res,session}) => ({comment: await res.json(), session}))
+            .then(({comment,session}) =>
             setComments([{
-                id: comments.length+1,
-                ytvideo_id,
-                content,
-                createdAt: date,
-                updatedAt: date,
-                UserId: session.id,
+                ...comment,
                 User: session,
+                createdAt: new Date(comment.createdAt),
+                updatedAt: new Date(comment.updatedAt),
                 nbReply: 0
             }, ...comments]) | setCommentCount(commentCount+1)
         );
+
+    const deleteComment = (commentToDelete,session) =>
+        CommentService.deleteComment(commentToDelete.id,session)
+            .then(({res}) =>
+                res.status === 204 ?
+                    setComments(comments.filter(comment => comment.id !== commentToDelete.id)) | setCommentCount(commentCount-1) :
+                    setComments(comments.map(comment =>
+                            comment.id !== commentToDelete.id ? comment : {...comment, error: (res.status === 403 ? "Erreur : Vous n'avez pas la permission, ou votre session a expirée" : "Ce commentaire n'existe pas")}
+                        ))
+            );
 
     useEffect(() => {
         CommentService.getComments(ytvideo_id)
@@ -43,7 +52,7 @@ export function CommentProvider({children}) {
     }, []);
 
     return (
-        <CommentContext.Provider value={{comments,nbPage,currentPage,commentCount,addComment}}>
+        <CommentContext.Provider value={{comments,nbPage,currentPage,commentCount,addComment,deleteComment}}>
             {children}
         </CommentContext.Provider>
     )

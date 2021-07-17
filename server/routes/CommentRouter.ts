@@ -82,7 +82,7 @@ CommentRouter.post('/reply/:id', (req,res) =>
                                     UserId: user.id,
                                     ParentId: comment.id
                                 }).save()
-                                .then(_ => res.sendStatus(201)) //@ts-ignore
+                                .then((comment) => res.status(201).json(comment)) //@ts-ignore
                                 .catch(e => console.error(e) | res.sendStatus(500))
                 ) //@ts-ignore
                 .catch(e => console.error(e) | res.sendStatus(500))
@@ -99,13 +99,13 @@ CommentRouter.post('/:ytvideo_id', async (req,res) => {
         res.sendStatus(404);
     else {
         let user: null|User = await getOrCreateUser(req.user);
-        await new Comment({
+        const comment = await new Comment({
             content: req.body.content,
             ytvideo_id: req.params.ytvideo_id,
             UserId: user.id
         }).save();
 
-        res.sendStatus(201);
+        res.status(201).json(comment);
     }
 });
 

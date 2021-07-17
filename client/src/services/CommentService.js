@@ -18,6 +18,14 @@ export default class CommentService {
                 },
                 body: RequestService.formatUrlEncoded({content,token: session.token})
             })
-        )
+        );
+    }
+
+    static deleteComment(commentId,session) {
+        return SessionService.checkIfTokenExpired(session, session =>
+            fetch(apiPath+'/'+commentId+"?token="+session.token, {
+                method: "DELETE"
+            })
+        );
     }
 }

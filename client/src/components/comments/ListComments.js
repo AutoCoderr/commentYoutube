@@ -1,6 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {CommentContext} from "../../contexts/CommentContext";
+import {SessionContext} from "../../contexts/SessionContext";
 
 function ListComments({comments}) {
+    const {deleteComment} = useContext(CommentContext);
+    const session = useContext(SessionContext);
+
     return (
         <ul>
             {
@@ -20,6 +25,16 @@ function ListComments({comments}) {
                         <p>
                             {comment.content}
                         </p>
+                        <div>
+                            {
+                                comment.UserId === session.id &&
+                                <a onClick={() => window.confirm("Voulez vous vraiment supprimer ce commentaire?") && deleteComment(comment,session)}>Supprimer</a>
+                            }
+                            {
+                                comment.error &&
+                                    <p style={{color: 'red'}}>{comment.error}</p>
+                            }
+                        </div>
                     </li>
                 )
             }
