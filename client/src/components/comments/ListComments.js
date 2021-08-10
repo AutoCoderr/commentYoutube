@@ -3,7 +3,7 @@ import {CommentContext} from "../../contexts/CommentContext";
 import {SessionContext} from "../../contexts/SessionContext";
 
 function ListComments({comments}) {
-    const {deleteComment} = useContext(CommentContext);
+    const {deleteComment,showEditComment,updateTextEditComment,cancelEditComment,editComment} = useContext(CommentContext);
     const session = useContext(SessionContext);
 
     return (
@@ -22,13 +22,29 @@ function ListComments({comments}) {
                                     <>Ajouté le {formatDate(comment.updatedAt)}</>
                             }
                         </span>
-                        <p>
-                            {comment.content}
-                        </p>
+                        <div className="body">
+                        {
+                            comment.editing ?
+                                <textarea onChange={(e) => updateTextEditComment(comment,e.target.value)}>
+                                    {comment.textEdit}
+                                </textarea> :
+                                    comment.content
+                        }
+                                </div>
                         <div>
                             {
-                                (session && comment.UserId === session.id) &&
-                                <a onClick={() => window.confirm("Voulez vous vraiment supprimer ce commentaire?") && deleteComment(comment)}>Supprimer</a>
+                                session && !comment.editing && comment.UserId === session.id &&
+                                    <div className="commentButtons">
+                                        <a onClick={() => window.confirm("Voulez vous vraiment supprimer ce commentaire?") && deleteComment(comment)}>Supprimer</a>
+                                        <a onClick={() => showEditComment(comment)}>Editer</a>
+                                    </div>
+                            }
+                            {
+                                comment.editing &&
+                                    <>
+                                        <a onClick={() => editComment(comment)}>Valider</a>
+                                        <a onClick={() => cancelEditComment(comment)}>Annuler</a>
+                                    </>
                             }
                             {
                                 comment.error &&

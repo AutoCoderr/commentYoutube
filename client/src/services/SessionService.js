@@ -11,7 +11,7 @@ export default class SessionService {
     }
 
     static testLogin() {
-        return request(apiPath+"/test", {})
+        return request(apiPath+"/test")
     }
 
     static reConnect = (callback) => {};

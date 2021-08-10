@@ -1,4 +1,3 @@
-import SessionService from "./SessionService";
 import RequestService from "./RequestService";
 import request from "../request";
 
@@ -8,6 +7,16 @@ export default class CommentService {
     static getComments(YTVideoID,page = 1) {
         return request(apiPath+"/"+YTVideoID+"?page="+page)
             .then(({res}) => res.json())
+    }
+
+    static editComment(commentId, content) {
+        return request(apiPath+"/"+commentId, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: RequestService.formatUrlEncoded({content})
+        })
     }
 
     static sendComment(YTVideoId,content) {
