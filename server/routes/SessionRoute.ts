@@ -21,7 +21,7 @@ SessionRouter.post('/login-anon', (req,res) => {
 SessionRouter.use(JWTMiddleWare);
 
 SessionRouter.get("/test", (req,res) => {
-    res.json(req.user);
+    res.sendStatus(200);
 })
 
 export default SessionRouter;

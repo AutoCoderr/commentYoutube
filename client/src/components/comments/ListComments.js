@@ -27,8 +27,8 @@ function ListComments({comments}) {
                         </p>
                         <div>
                             {
-                                comment.UserId === session.id &&
-                                <a onClick={() => window.confirm("Voulez vous vraiment supprimer ce commentaire?") && deleteComment(comment,session)}>Supprimer</a>
+                                (session && comment.UserId === session.id) &&
+                                <a onClick={() => window.confirm("Voulez vous vraiment supprimer ce commentaire?") && deleteComment(comment)}>Supprimer</a>
                             }
                             {
                                 comment.error &&

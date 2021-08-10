@@ -5,7 +5,6 @@ import ListComments from "./ListComments";
 
 function Comments() {
     const {comments,nbPage,currentPage,commentCount,addComment} = useContext(CommentContext);
-    const session = useContext(SessionContext);
 
     const [commentToAdd,setCommentToAdd] = useState("");
 
@@ -13,7 +12,7 @@ function Comments() {
         setCommentToAdd(e.target.value);
     }
     const sendComment = () => {
-        addComment(commentToAdd,session);
+        addComment(commentToAdd);
         setCommentToAdd("");
     }
 

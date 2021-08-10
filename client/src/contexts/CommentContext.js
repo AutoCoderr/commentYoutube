@@ -1,6 +1,6 @@
 import React, {createContext,useState,useEffect} from 'react';
 import CommentService from "../services/CommentService";
-import useQuery from "../services/useQuery";
+import useQuery from "../useQuery";
 
 export const CommentContext = createContext();
 
@@ -12,10 +12,8 @@ export function CommentProvider({children}) {
 
     const ytvideo_id = useQuery().get("v");
 
-    const date = new Date();
-
-    const addComment = (content,session) => content.trim() !== "" &&
-        CommentService.sendComment(ytvideo_id,content,session)
+    const addComment = (content) => content.trim() !== "" &&
+        CommentService.sendComment(ytvideo_id,content)
             .then(async ({res,session}) => ({comment: await res.json(), session}))
             .then(({comment,session}) =>
             setComments([{

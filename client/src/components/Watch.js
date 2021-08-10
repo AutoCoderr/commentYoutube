@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import useQuery from "../services/useQuery";
+import useQuery from "../useQuery";
 import VideoService from "../services/VideoService";
 import {CommentProvider} from "../contexts/CommentContext";
 import '../css/watch.css';

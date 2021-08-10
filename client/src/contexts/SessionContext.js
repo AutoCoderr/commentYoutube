@@ -1,5 +1,5 @@
-import React,{createContext,useState,useEffect} from "react";
-import useQuery from "../services/useQuery";
+import React,{createContext,useState,useEffect, useCallback} from "react";
+import useQuery from "../useQuery";
 import SessionService from "../services/SessionService";
 
 export const SessionContext = createContext(null);
@@ -9,21 +9,30 @@ export function SessionProvider({children}) {
 
     const query = useQuery();
 
+    const connect = useCallback(
+        () => SessionService.loginAnon()
+                .then(session => {
+                    setSession(session);
+                    localStorage.setItem('session',JSON.stringify(session))
+                    return session;
+                })
+                .catch(e => console.error(e))
+        , [])
+
     useEffect(() => {
+        let curSession;
         if (query.get('code')) {
             console.log('there is code');
-        } else if (localStorage.getItem('session') ) {
-            setSession(JSON.parse(localStorage.getItem('session')));
+        } else if ((curSession = localStorage.getItem('session'))) {
+            curSession = JSON.parse(curSession);
+            SessionService.testLogin()
+                .then(({session}) => session.token === curSession.token && setSession(session));
         } else {
-            SessionService.loginAnon()
-                .then(anonSession => setSession(anonSession) | localStorage.setItem('session',JSON.stringify(anonSession)))
-                .catch(e => console.error(e));
+            connect();
         }
 
-        SessionService.reConnect = callback =>
-            SessionService.loginAnon()
-                .then(anonSession => setSession(anonSession) | localStorage.setItem('session',JSON.stringify(anonSession)) | callback(anonSession))
-                .catch(e => console.error(e));
+        SessionService.reConnect = callback => connect().then(session => callback(session));
+
     }, []);
 
 

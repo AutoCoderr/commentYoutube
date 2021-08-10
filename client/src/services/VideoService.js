@@ -7,7 +7,7 @@ export default class VideoService {
 
     static getYTVideo(ytvideo_id) {
         return fetch(apiPath+'/get_yt_video/'+ytvideo_id)
-            .then(res => res.status === 200 ? res.json(): false)
+            .then(res => res.status === 200 ? res.json() : false)
     }
 
     static computeDescription(descriptionString) {

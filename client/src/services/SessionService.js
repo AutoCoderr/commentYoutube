@@ -1,3 +1,5 @@
+import request from "../request";
+
 const apiPath = window.location.protocol+'//'+window.location.hostname+":81/session"
 
 export default class SessionService {
@@ -8,16 +10,9 @@ export default class SessionService {
             .then(res => res.status !== 500 && res.json())
     }
 
-    static reConnect = (callback) => {};
-
-    static checkIfTokenExpired(session,request) {
-        return new Promise(resolve =>
-            request(session).then(res =>
-                res.status === 401 ?
-                    this.reConnect((session) =>
-                        request(session).then(res => resolve({res,session}))
-                    ) : resolve({res,session})
-            )
-        )
+    static testLogin() {
+        return request(apiPath+"/test", {})
     }
+
+    static reConnect = (callback) => {};
 }
