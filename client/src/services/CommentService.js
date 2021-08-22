@@ -6,7 +6,12 @@ const apiPath = window.location.protocol+"//"+window.location.hostname+":81/comm
 export default class CommentService {
     static getComments(YTVideoID,page = 1) {
         return request(apiPath+"/"+YTVideoID+"?page="+page)
-            .then(({res}) => res.json())
+            .then(({res}) => res.json());
+    }
+
+    static getReplies(commentId) {
+        return request(apiPath+"/reply/"+commentId)
+            .then(({res}) => res.json());
     }
 
     static editComment(commentId, content) {
@@ -19,8 +24,8 @@ export default class CommentService {
         })
     }
 
-    static sendComment(YTVideoId,content) {
-        return request(apiPath+"/"+YTVideoId, {
+    static sendComment(YTVideoId,content,parent) {
+        return request(parent == null ? apiPath+"/"+YTVideoId : apiPath+"/reply/"+parent, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

@@ -48,17 +48,19 @@ CommentRouter.get("/:ytvideo_id", (req,res) => {
 });
 
 CommentRouter.get('/reply/:id', (req,res) => {
-    Comment.findOne({
-        where: {id: req.params.id},
+    Comment.findAll({
+        where: {
+            ParentId: req.params.id
+        },
         order: [
-            [{model: Comment, as: 'children'}, 'createdAt', 'ASC']
+            ['createdAt', 'ASC']
         ],
-        include: {model: Comment, as: 'children'}
+        include: User
     })
-        .then(comment =>
-            comment == null ?
+        .then(comments =>
+            comments.length == 0 ?
                 res.sendStatus(404) :
-                res.json(comment.children)
+                res.json(comments)
         )
 });
 

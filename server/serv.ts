@@ -1,7 +1,7 @@
 import {migrate} from "./lib/Migration";
 import express from 'express';
 import cors from 'cors';
-import SessionRouter from "./routes/SessionRoute";
+import SessionRouter from "./routes/SessionRouter";
 import CommentRouter from "./routes/CommentRouter";
 import getYTVideo from "./lib/getYTVideo";
 
