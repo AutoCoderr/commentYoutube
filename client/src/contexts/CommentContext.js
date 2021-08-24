@@ -35,6 +35,15 @@ export function CommentProvider({children}) {
         ), [comments]
     )
 
+    const showOrHideNewReply = useCallback(
+        (commentToShowNewReply) => setComments(comments.map(comment =>
+                ({
+                    ...comment,
+                    showNewReply: comment.id === commentToShowNewReply.id ? !comment.showNewReply : false
+                })
+        )), [comments]
+    )
+
     const hideReply = useCallback(
         (commentToHideAnswers) => setComments(comments.map(comment =>
             comment.id === commentToHideAnswers.id ?
@@ -155,6 +164,7 @@ export function CommentProvider({children}) {
                     editing: false,
                     textEdit: "",
                     newReplyText: "",
+                    showNewReply: false,
                     showReplies: false
                 }, ...comments] :
                     comments.map(comment =>
@@ -163,6 +173,8 @@ export function CommentProvider({children}) {
                                 ...comment,
                                 nbReply: comment.nbReply+1,
                                 showReplies: true,
+                                newReplyText: '',
+                                showNewReply: false,
                                 replies: [...comment.replies, {
                                     ...addedComment,
                                     User: session,
@@ -221,6 +233,7 @@ export function CommentProvider({children}) {
                     editing: false,
                     textEdit: "",
                     newReplyText: "",
+                    showNewReply: false,
                     replies: [],
                     showReplies: false
                 }))]) |
@@ -239,7 +252,7 @@ export function CommentProvider({children}) {
     useEffect(() => getComments(), []);
 
     return (
-        <CommentContext.Provider value={{comments,addComment,commentCount,deleteComment,updateTextEditComment,showEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText,displayMoreComments,loadingComments}}>
+        <CommentContext.Provider value={{comments,addComment,commentCount,deleteComment,updateTextEditComment,showEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText,showOrHideNewReply,displayMoreComments,loadingComments}}>
             {children}
         </CommentContext.Provider>
     )

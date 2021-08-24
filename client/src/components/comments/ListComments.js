@@ -3,7 +3,7 @@ import {CommentContext} from "../../contexts/CommentContext";
 import {SessionContext} from "../../contexts/SessionContext";
 
 function ListComments({comments, parent = null}) {
-    const {deleteComment,showEditComment,updateTextEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText,addComment} = useContext(CommentContext);
+    const {deleteComment,showEditComment,updateTextEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText,addComment,showOrHideNewReply} = useContext(CommentContext);
     const session = useContext(SessionContext);
 
     return (
@@ -63,10 +63,17 @@ function ListComments({comments, parent = null}) {
                                             réponses ({comment.nbReply}) </a>
                                         <ListComments comments={comment.replies} parent={comment.id}/>
                                     </>}
-                            <textarea className="reply-text" value={comment.newReplyText} onChange={(e) => updateNewReplyText(comment, e.target.value)}>
-                                {comment.newReplyText}
-                            </textarea>
-                            <a onClick={() => addComment(comment.newReplyText,comment.id)}>Répondre</a>
+                            {
+                                comment.showNewReply ?
+                                    <>
+                                        <textarea className="reply-text" value={comment.newReplyText} onChange={(e) => updateNewReplyText(comment, e.target.value)}>
+                                            {comment.newReplyText}
+                                        </textarea>
+                                        <a onClick={() => addComment(comment.newReplyText,comment.id)}>Envoyer</a>
+                                        <a onClick={() => showOrHideNewReply(comment)}>Annuler</a>
+                                    </> :
+                                    <a onClick={() => showOrHideNewReply(comment)}>Répondre</a>
+                            }
                         </div>
                         }
                     </li>
