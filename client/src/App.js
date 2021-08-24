@@ -4,6 +4,7 @@ import {BrowserRouter, Link, Route} from "react-router-dom";
 import React from 'react';
 import {SessionProvider,SessionContext} from "./contexts/SessionContext";
 import Watch from "./components/Watch";
+import Index from "./components/Index";
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
         </header>
         <main>
             <SessionProvider>
+                <Route exact path="/" component={Index}/>
                 <Route exact path="/watch" component={Watch}/>
             </SessionProvider>
         </main>

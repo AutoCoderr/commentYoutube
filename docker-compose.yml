@@ -8,7 +8,7 @@ services:
     working_dir: /client
     command: npm start
     ports:
-    - '80:3000'
+    - '3000:3000'
     networks:
       - exterior
 
@@ -21,7 +21,7 @@ services:
     working_dir: /server
     command: npm run watch
     ports:
-    - '81:81'
+    - '3001:81'
     env_file:
       - .env
     networks:

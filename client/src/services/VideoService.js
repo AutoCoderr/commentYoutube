@@ -1,6 +1,6 @@
 import React from "react";
 
-const apiPath = window.location.protocol+'//'+window.location.hostname+":81";
+const apiPath = window.location.protocol+'//'+window.location.hostname+":3001";
 const linkRegex = new RegExp("http(s)?:\\/\\/[a-zA-Z0-9./\\-_?&=]+/?");
 
 export default class VideoService {

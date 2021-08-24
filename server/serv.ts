@@ -9,9 +9,9 @@ migrate().then(() => console.log("Migration effectuée!"));
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(cors());
 
 app.use('/session', SessionRouter);
 app.use('/comment', CommentRouter);

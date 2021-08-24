@@ -1,6 +1,6 @@
 import request from "../request";
 
-const apiPath = window.location.protocol+'//'+window.location.hostname+":81/session"
+const apiPath = window.location.protocol+'//'+window.location.hostname+":3001/session"
 
 export default class SessionService {
     static loginAnon() {

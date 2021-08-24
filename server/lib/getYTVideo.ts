@@ -3,6 +3,13 @@ import https from "https";
 const videosCache = {};
 
 export default function getYTVideo(ytvideo_id) {
+    return {
+        title: "Une vidéo random",
+        views: 42,
+        author: "TOTO",
+        channelId: 1234,
+        description: "WESH LES GENS C'EST SQUEEZIE"
+    };
     return new Promise(resolve => {
         if (ytvideo_id.length < 11) {
             resolve(false);
@@ -62,7 +69,7 @@ export default function getYTVideo(ytvideo_id) {
                             author: json.videoDetails.author,
                             channelId: json.videoDetails.channelId,
                             description: json.videoDetails.shortDescription
-                        }/*json*/ :
+                        } :
                         false;
                 } catch (e) {}
                 videosCache[ytvideo_id] = {date: new Date(), infos};

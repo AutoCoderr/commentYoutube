@@ -1,7 +1,7 @@
 import RequestService from "./RequestService";
 import request from "../request";
 
-const apiPath = window.location.protocol+"//"+window.location.hostname+":81/comment";
+const apiPath = window.location.protocol+"//"+window.location.hostname+":3001/comment";
 
 export default class CommentService {
     static getComments(YTVideoID,page = 1) {
