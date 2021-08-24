@@ -1,10 +1,9 @@
 import React, {useContext,useState,useEffect} from 'react';
 import {CommentContext} from "../../contexts/CommentContext";
-import {SessionContext} from "../../contexts/SessionContext";
 import ListComments from "./ListComments";
 
 function Comments() {
-    const {comments,nbPage,currentPage,commentCount,addComment} = useContext(CommentContext);
+    const {comments,commentCount,addComment,displayMoreComments,loadingComments} = useContext(CommentContext);
 
     const [commentToAdd,setCommentToAdd] = useState("");
 
@@ -26,7 +25,13 @@ function Comments() {
             <a className="send-comment-button" onClick={sendComment}>Envoyer</a>
             {
                 comments.length > 0 &&
+                <>
                 <ListComments comments={comments}/>
+                    {
+                        commentCount > comments.length && !loadingComments &&
+                            <a className="plus_button" onClick={displayMoreComments}>Plus</a>
+                    }
+                </>
             }
         </div>
     )

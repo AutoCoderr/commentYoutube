@@ -8,7 +8,7 @@ export default function getYTVideo(ytvideo_id) {
         views: 42,
         author: "TOTO",
         channelId: 1234,
-        description: "WESH LES GENS C'EST SQUEEZIE"
+        description: "WESH LES GENS C'EST SQUEEZIE\nCAVA ???\nezdhezfezfe"
     };
     return new Promise(resolve => {
         if (ytvideo_id.length < 11) {

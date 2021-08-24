@@ -9,7 +9,7 @@ const CommentRouter = Router();
 
 CommentRouter.get("/:ytvideo_id", (req,res) => {
     const nbCommentByPage = 50;
-    const page = req.query.page && parseInt(req.query.page).toString() == req.query.page && req.query.page != "NaN" ? parseInt(req.query.page) : 1;
+    const page = (req.query.page && parseInt(req.query.page).toString() == req.query.page && req.query.page != "NaN") ? parseInt(req.query.page) : 1;
     Comment.findAll({
         where: {
             ytvideo_id: req.params.ytvideo_id,

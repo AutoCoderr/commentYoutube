@@ -6,9 +6,9 @@ export const CommentContext = createContext();
 
 export function CommentProvider({children}) {
     const [comments, setComments] = useState([]);
-    const [nbPage, setNbPage] = useState(1);
-    const [currentPage, setCurrentPage] = useState(1);
     const [commentCount, setCommentCount] = useState(0);
+    const [nbCommentByPage,setNbCommentByPage] = useState(0);
+    const [loadingComments,setLoadingComments] = useState(true);
 
     const ytvideo_id = useQuery().get("v");
 
@@ -211,10 +211,10 @@ export function CommentProvider({children}) {
                     ))
             ), [comments,commentCount])
 
-    useEffect(() => {
-        CommentService.getComments(ytvideo_id)
-            .then(res =>
-                setComments(res.comments.map(comment => ({
+    const getComments = useCallback(
+        (page = 1) => CommentService.getComments(ytvideo_id,page)
+            .then(res => setLoadingComments(false) |
+                setComments([...comments, ...res.comments.map(comment => ({
                     ...comment,
                     createdAt: new Date(comment.createdAt),
                     updatedAt: new Date(comment.updatedAt),
@@ -223,15 +223,23 @@ export function CommentProvider({children}) {
                     newReplyText: "",
                     replies: [],
                     showReplies: false
-                }))) |
-                setNbPage(Math.floor(res.count/res.nbCommentByPage)+(res.count%res.nbCommentByPage !== 0 ? 1 : 0)) |
-                setCommentCount(res.count)
-            );
+                }))]) |
+                (nbCommentByPage !== res.nbCommentByPage && setNbCommentByPage(res.nbCommentByPage)) |
+                (commentCount !== res.count && setCommentCount(res.count))
+            ),
+        [comments,commentCount,nbCommentByPage]
+    )
 
-    }, []);
+    const displayMoreComments = useCallback(
+        () => setLoadingComments(true) |
+            getComments(Math.floor(comments.length/nbCommentByPage)+1),
+        [comments,commentCount,nbCommentByPage]
+    )
+
+    useEffect(() => getComments(), []);
 
     return (
-        <CommentContext.Provider value={{comments,nbPage,currentPage,commentCount,addComment,deleteComment,updateTextEditComment,showEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText}}>
+        <CommentContext.Provider value={{comments,addComment,commentCount,deleteComment,updateTextEditComment,showEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText,displayMoreComments,loadingComments}}>
             {children}
         </CommentContext.Provider>
     )

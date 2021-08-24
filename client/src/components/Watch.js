@@ -52,11 +52,14 @@ function Watch() {
                             <p className={descriptionCollapsed ? 'collapsed' : ''}>
                                 {VideoService.computeDescription(videoInfos.description)}
                             </p>
-                            <a className="show-description-button" onClick={() => setDescriptionCollapsed(!descriptionCollapsed)}>
-                                {
-                                    descriptionCollapsed ? 'PLUS' : 'MOINS'
-                                }
-                            </a>
+                            {
+                                videoInfos.description.split("\n").length >= 4 &&
+                                    <a className="show-description-button" onClick={() => setDescriptionCollapsed(!descriptionCollapsed)}>
+                                        {
+                                            descriptionCollapsed ? 'PLUS' : 'MOINS'
+                                        }
+                                    </a>
+                            }
                         </div>
                     </div>
                     <CommentProvider>
