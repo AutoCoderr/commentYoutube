@@ -1,6 +1,8 @@
 import React, {useContext} from 'react';
 import {CommentContext} from "../../contexts/CommentContext";
 import {SessionContext} from "../../contexts/SessionContext";
+import '../../css/listComments.css';
+import FormatService from "../../services/FormatService";
 
 function ListComments({comments, parent = null}) {
     const {deleteComment,showEditComment,updateTextEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText,addComment,showOrHideNewReply} = useContext(CommentContext);
@@ -28,22 +30,22 @@ function ListComments({comments, parent = null}) {
                                 <textarea value={comment.textEdit} onChange={(e) => updateTextEditComment(comment,e.target.value,parent)}>
                                     {comment.textEdit}
                                 </textarea> :
-                                    comment.content
+                                FormatService.computeMessage(comment.content)
                         }
                         </div>
                         <div>
                             {
                                 session && !comment.editing && comment.UserId === session.id &&
                                     <div className="commentButtons">
-                                        <a onClick={() => window.confirm("Voulez vous vraiment supprimer ce commentaire?") && deleteComment(comment,parent)}>Supprimer</a>
-                                        <a onClick={() => showEditComment(comment)}>Editer</a>
+                                        <a className="btn" onClick={() => window.confirm("Voulez vous vraiment supprimer ce commentaire?") && deleteComment(comment,parent)}>Supprimer</a>
+                                        <a className="btn" onClick={() => showEditComment(comment)}>Editer</a>
                                     </div>
                             }
                             {
                                 comment.editing &&
                                     <div className="commentButtons">
-                                        <a onClick={() => editComment(comment,parent)}>Valider</a>
-                                        <a onClick={() => cancelEditComment(comment,parent)}>Annuler</a>
+                                        <a className="btn" onClick={() => editComment(comment,parent)}>Valider</a>
+                                        <a className="btn" onClick={() => cancelEditComment(comment,parent)}>Annuler</a>
                                     </div>
                             }
                             {
@@ -52,7 +54,7 @@ function ListComments({comments, parent = null}) {
                             }
                         </div>
                         { parent == null &&
-                        <div className="answers">
+                        <div className={"answers"+(comment.showReplies ? " margin_bottom_replies" : "")}>
                             {(comment.nbReply > 0 && !comment.showReplies) ?
                                 <a className="replies_button" onClick={() => showReplies(comment)}>Voir les réponses ({comment.nbReply})</a> :
                                 (comment.replies.length === 0 && comment.showReplies) ?
@@ -69,10 +71,10 @@ function ListComments({comments, parent = null}) {
                                         <textarea className="reply-text" value={comment.newReplyText} onChange={(e) => updateNewReplyText(comment, e.target.value)}>
                                             {comment.newReplyText}
                                         </textarea>
-                                        <a onClick={() => addComment(comment.newReplyText,comment.id)}>Envoyer</a>
-                                        <a onClick={() => showOrHideNewReply(comment)}>Annuler</a>
+                                        <a className="btn" onClick={() => addComment(comment.newReplyText,comment.id)}>Envoyer</a>
+                                        <a className="btn" onClick={() => showOrHideNewReply(comment)}>Annuler</a>
                                     </> :
-                                    <a onClick={() => showOrHideNewReply(comment)}>Répondre</a>
+                                    <a className="btn" onClick={() => showOrHideNewReply(comment)}>Répondre</a>
                             }
                         </div>
                         }

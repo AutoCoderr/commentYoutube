@@ -1,9 +1,10 @@
-import React, {useContext,useState,useEffect} from 'react';
+import React, {useContext,useState} from 'react';
 import {CommentContext} from "../../contexts/CommentContext";
 import ListComments from "./ListComments";
+import '../../css/comment.css';
 
 function Comments() {
-    const {comments,commentCount,addComment,displayMoreComments,loadingComments} = useContext(CommentContext);
+    const {comments,totalCommentCount,addComment,displayMoreComments,loadingComments} = useContext(CommentContext);
 
     const [commentToAdd,setCommentToAdd] = useState("");
 
@@ -17,19 +18,19 @@ function Comments() {
 
     return (
         <div>
-            <h2>Il y a {commentCount} commentaire{commentCount > 1 ? 's' : ''}</h2>
+            <h2>Il y a {totalCommentCount} commentaire{totalCommentCount > 1 ? 's' : ''}</h2>
             <h3>Ajouter un commentaire</h3>
             <textarea value={commentToAdd} onChange={handleCommentToAdd}>
                 {commentToAdd}
             </textarea>
-            <a className="send-comment-button" onClick={sendComment}>Envoyer</a>
+            <a className="btn send-comment-button" onClick={sendComment}>Envoyer</a>
             {
                 comments.length > 0 &&
                 <>
                 <ListComments comments={comments}/>
                     {
-                        commentCount > comments.length && !loadingComments &&
-                            <a className="plus_button" onClick={displayMoreComments}>Plus</a>
+                        totalCommentCount > comments.length && !loadingComments &&
+                            <a className="btn plus_button" onClick={displayMoreComments}>Plus</a>
                     }
                 </>
             }

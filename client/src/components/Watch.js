@@ -4,6 +4,7 @@ import VideoService from "../services/VideoService";
 import {CommentProvider} from "../contexts/CommentContext";
 import '../css/watch.css';
 import Comments from "./comments/Comments";
+import FormatService from "../services/FormatService";
 
 function Watch() {
     const [descriptionCollapsed, setDescriptionCollapsed] = useState(true);
@@ -39,7 +40,7 @@ function Watch() {
                         />
                         <div className="video-infos">
                             <span>
-                                { VideoService.formatViews(videoInfos.views)} vues
+                                { FormatService.formatViews(videoInfos.views)} vues
                             </span>
                             <span>
                                 <a target="_blank" href={"https://www.youtube.com/watch?v="+YTVideoId}>Aller sur youtube</a>
@@ -50,7 +51,7 @@ function Watch() {
                         </div>
                         <div className="description">
                             <p className={descriptionCollapsed ? 'collapsed' : ''}>
-                                {VideoService.computeDescription(videoInfos.description)}
+                                {FormatService.computeMessage(videoInfos.description)}
                             </p>
                             {
                                 videoInfos.description.split("\n").length >= 4 &&

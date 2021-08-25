@@ -6,7 +6,7 @@ export const CommentContext = createContext();
 
 export function CommentProvider({children}) {
     const [comments, setComments] = useState([]);
-    const [commentCount, setCommentCount] = useState(0);
+    const [totalCommentCount, setTotalCommentCount] = useState(0);
     const [nbCommentByPage,setNbCommentByPage] = useState(0);
     const [loadingComments,setLoadingComments] = useState(true);
 
@@ -183,8 +183,8 @@ export function CommentProvider({children}) {
                                 }]
                             } : comment
                     )
-                ) | (parent == null && setCommentCount(commentCount+1))
-            ), [commentCount,comments,ytvideo_id])
+                ) | (parent == null && setTotalCommentCount(totalCommentCount+1))
+            ), [totalCommentCount,comments,ytvideo_id])
 
     const errorDeleteCommentMapper = useCallback(
         (comment,res) => ({...comment, error: (res.status === 403 ? "Vous n'avez pas la permission, ou votre session a expirée" : "Ce commentaire n'existe pas")})
@@ -196,7 +196,7 @@ export function CommentProvider({children}) {
             .then(({res}) =>
                 res.status === 204 ?
                     parent == null ?
-                        setComments(comments.filter(comment => comment.id !== commentToDelete.id)) | setCommentCount(commentCount-1) :
+                        setComments(comments.filter(comment => comment.id !== commentToDelete.id)) | setTotalCommentCount(totalCommentCount-1) :
                         setComments(comments.map(comment =>
                             comment.id === parent ?
                                 {
@@ -221,7 +221,7 @@ export function CommentProvider({children}) {
                             errorDeleteCommentMapper(comment,res) :
                             comment
                     ))
-            ), [comments,commentCount])
+            ), [comments,totalCommentCount])
 
     const getComments = useCallback(
         (page = 1) => CommentService.getComments(ytvideo_id,page)
@@ -238,21 +238,21 @@ export function CommentProvider({children}) {
                     showReplies: false
                 }))]) |
                 (nbCommentByPage !== res.nbCommentByPage && setNbCommentByPage(res.nbCommentByPage)) |
-                (commentCount !== res.count && setCommentCount(res.count))
+                (totalCommentCount !== res.count && setTotalCommentCount(res.count))
             ),
-        [comments,commentCount,nbCommentByPage]
+        [comments,totalCommentCount,nbCommentByPage]
     )
 
     const displayMoreComments = useCallback(
         () => setLoadingComments(true) |
             getComments(Math.floor(comments.length/nbCommentByPage)+1),
-        [comments,commentCount,nbCommentByPage]
+        [comments,totalCommentCount,nbCommentByPage]
     )
 
     useEffect(() => getComments(), []);
 
     return (
-        <CommentContext.Provider value={{comments,addComment,commentCount,deleteComment,updateTextEditComment,showEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText,showOrHideNewReply,displayMoreComments,loadingComments}}>
+        <CommentContext.Provider value={{comments,addComment,totalCommentCount,deleteComment,updateTextEditComment,showEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText,showOrHideNewReply,displayMoreComments,loadingComments}}>
             {children}
         </CommentContext.Provider>
     )

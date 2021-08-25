@@ -1,0 +1,47 @@
+li {
+	list-style-type: none;
+	margin-left: -30px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.reply-text, .body textarea {
+	width: 200px;
+	height: 67px;
+}
+
+.replies_button {
+	color: blue;
+	cursor: pointer;
+	display: block;
+}
+
+.replies_button:hover {
+	text-decoration: underline;
+}
+
+.margin_bottom_replies {
+	margin-bottom: 50px;
+}
+
+.answers ul {
+	margin-left: 30px;
+	background-color: #cad2ff;
+}
+
+.body {
+	width: 250px;
+	text-align: left;
+}
+
+.name {
+	margin-right: 5px;
+}
+
+.datetime {
+	margin-left: 5px;
+}
+
+.commentButtons  {
+	margin-left: -30px;
+}
