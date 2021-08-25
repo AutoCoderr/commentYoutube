@@ -8,6 +8,8 @@ export interface IComment {
     id?: number;
     ytvideo_id: string;
     content: string;
+    likes: number;
+    dislikes: number;
     User: IUser;
     UserId: number;
     ParentId: number;
@@ -21,6 +23,8 @@ export default class Comment extends Model {
     public id!: number;
     public ytvideo_id!: string;
     public content!: string;
+    public likes!: number;
+    public dislikes!: number;
     public User!: IUser;
     public UserId!: number;
     public ParentId!: number;
@@ -37,6 +41,16 @@ Comment.init(
             autoIncrement: true,
             primaryKey: true,
             allowNull: false
+        },
+        likes: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
+        },
+        dislikes: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
         },
         ytvideo_id: {
             type: DataTypes.STRING,

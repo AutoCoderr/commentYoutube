@@ -4,7 +4,7 @@ import http from "http";
 export default function request(url,params: any = {}): Promise<string> {
     return new Promise(resolve => {
         const protos = {https,http};
-        const proto = protos[url.split("://")[0]];
+        const proto = protos[url.split("://")[0] ?? "http"];
         params = {
             ...params,
             host: url.split("://")[1].split("/")[0],

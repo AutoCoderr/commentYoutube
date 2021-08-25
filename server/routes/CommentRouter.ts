@@ -36,6 +36,8 @@ CommentRouter.get("/:ytvideo_id", (req,res) => {
                     id: comment.id,
                     ytvideo_id: comment.ytvideo_id,
                     content: comment.content,
+                    likes: comment.likes,
+                    dislikes: comment.dislikes,
                     createdAt: comment.createdAt,
                     updatedAt: comment.updatedAt,
                     UserId: comment.UserId,

@@ -26,7 +26,8 @@ export function CommentProvider({children}) {
                         replies: replies.map(reply => ({
                             ...reply,
                             createdAt: new Date(reply.createdAt),
-                            updatedAt: new Date(reply.updatedAt)
+                            updatedAt: new Date(reply.updatedAt),
+                            showMenu: false
                         })),
                         showReplies: true
                     } :
@@ -112,40 +113,20 @@ export function CommentProvider({children}) {
         ))
         , [comments]);
 
-    const showEditComment = useCallback(
+    const showOrHideEditComment = useCallback(
         (commentToEdit) => setComments(comments.map(comment =>
                 ({
                     ...comment,
-                    editing: comment.id === commentToEdit.id,
+                    editing: comment.id === commentToEdit.id ? !comment.editing : false,
+                    showMenu: comment.id === commentToEdit.id ? false : comment.showMenu,
                     textEdit: comment.content,
                     replies: comment.replies.map(reply => ({
                             ...reply,
-                            editing: reply.id === commentToEdit.id,
+                            editing: reply.id === commentToEdit.id ? !comment.editing : false,
+                            showMenu: reply.id === commentToEdit.id ? false : reply.showMenu,
                             textEdit: reply.content,
                         }))
                 })
-        ))
-        , [comments]
-    )
-
-    const cancelEditComment = useCallback(
-        (commentToCancel,parent) => setComments(comments.map(comment =>
-            comment.id === parent ?
-                {
-                    ...comment,
-                    replies: comment.replies.map(reply =>
-                        reply.id === commentToCancel.id ?
-                            {
-                                ...reply,
-                                editing: false
-                            } : reply
-                    )
-                } :
-                comment.id === commentToCancel.id ?
-                    {
-                        ...comment,
-                        editing: false
-                    } : comment
         ))
         , [comments]
     )
@@ -165,7 +146,8 @@ export function CommentProvider({children}) {
                     textEdit: "",
                     newReplyText: "",
                     showNewReply: false,
-                    showReplies: false
+                    showReplies: false,
+                    showMenu: false
                 }, ...comments] :
                     comments.map(comment =>
                         comment.id === parent ?
@@ -235,12 +217,35 @@ export function CommentProvider({children}) {
                     newReplyText: "",
                     showNewReply: false,
                     replies: [],
-                    showReplies: false
+                    showReplies: false,
+                    showMenu: false
                 }))]) |
                 (nbCommentByPage !== res.nbCommentByPage && setNbCommentByPage(res.nbCommentByPage)) |
                 (totalCommentCount !== res.count && setTotalCommentCount(res.count))
             ),
         [comments,totalCommentCount,nbCommentByPage]
+    )
+
+    const showOrHideCommentMenu = useCallback(
+        (commentToShowMenu,parent) => setComments(comments.map(comment =>
+            comment.id === parent ?
+                {
+                    ...comment,
+                    replies: comment.replies.map(reply =>
+                        reply.id === commentToShowMenu.id ?
+                            {
+                                ...reply,
+                                showMenu: !reply.showMenu
+                            } : reply
+                    )
+                } :
+                comment.id === commentToShowMenu.id ?
+                    {
+                        ...comment,
+                        showMenu: !comment.showMenu
+                    } : comment
+        ))
+        , [comments]
     )
 
     const displayMoreComments = useCallback(
@@ -252,7 +257,7 @@ export function CommentProvider({children}) {
     useEffect(() => getComments(), []);
 
     return (
-        <CommentContext.Provider value={{comments,addComment,totalCommentCount,deleteComment,updateTextEditComment,showEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText,showOrHideNewReply,displayMoreComments,loadingComments}}>
+        <CommentContext.Provider value={{comments,addComment,totalCommentCount,deleteComment,updateTextEditComment,showOrHideEditComment,editComment,showReplies,hideReply,updateNewReplyText,showOrHideNewReply,displayMoreComments,loadingComments,showOrHideCommentMenu}}>
             {children}
         </CommentContext.Provider>
     )

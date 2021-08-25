@@ -1,6 +1,6 @@
 li {
 	list-style-type: none;
-	margin-left: -30px;
+	margin-left: -40px;
 	margin-bottom: 10px;
 	display: block;
 }
@@ -14,18 +14,15 @@ li {
 	color: blue;
 	cursor: pointer;
 	display: block;
+	width: 200px;
 }
 
 .replies_button:hover {
 	text-decoration: underline;
 }
 
-.margin_bottom_replies {
-	margin-bottom: 50px;
-}
-
 .answers ul {
-	margin-left: 30px;
+	margin-left: 100px;
 	background-color: #cad2ff;
 }
 
@@ -42,6 +39,64 @@ li {
 	margin-left: 5px;
 }
 
-.commentButtons  {
-	margin-left: -30px;
+.answers .likes_and_dislikes {
+	margin-left: -100px;
+}
+
+.likes_and_dislikes img {
+	width: 17px;
+	height: 17px;
+	margin: 0 5px -2px;
+}
+
+.likes_and_dislikes span {
+	margin: 0 7px;
+	cursor: pointer;
+	user-select: none;
+	border-radius: 10px;
+}
+
+.likes_and_dislikes span:hover {
+	background-color: #b0bcff;
+}
+
+.comment_menu {
+	position: relative;
+	margin-left: 30px;
+	border-radius: 5px;
+}
+
+.comment_menu ul {
+	position: absolute;
+	background-color: white;
+	width: 50px;
+	top: 20px;
+	left: -35px;
+	margin-left: 0;
+}
+
+.comment_menu li {
+	cursor: pointer;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 5px;
+}
+.comment_menu li:hover {
+	background-color: #BBB;
+}
+
+.comment_menu img {
+	width: 17px;
+	height: 17px;
+	padding: 2px;
+	margin-bottom: -4px;
+	cursor: pointer;
+}
+
+.comment_menu img:hover {
+	background-color: #b0bcff;
+}
+
+.comment_back div {
+	display: inline-block;
 }

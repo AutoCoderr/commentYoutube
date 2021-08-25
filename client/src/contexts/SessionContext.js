@@ -33,10 +33,6 @@ export function SessionProvider({children}) {
                 .then(session => {
                     setSession(session);
                     localStorage.setItem('session',JSON.stringify(session))
-                    let currentYTVideo;
-                    if (code && (currentYTVideo = localStorage.getItem("currentYTVideo"))) {
-                        history.push("/watch?v="+currentYTVideo);
-                    }
                     return session;
                 })
                 .catch(e => console.error(e))
@@ -60,6 +56,11 @@ export function SessionProvider({children}) {
 
         SessionService.getClientId().then(clientId => setClientId(clientId));
 
+        let currentYTVideo;
+        if ((currentYTVideo = localStorage.getItem("currentYTVideo"))) {
+            localStorage.removeItem("currentYTVideo");
+            history.push("/watch?v="+currentYTVideo);
+        }
     }, []);
 
 
