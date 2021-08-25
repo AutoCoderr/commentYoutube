@@ -1,8 +1,13 @@
 main {
   text-align: center;
   background-color: #d7ddff;
+  height: 100%;
 }
 
 body, main * {
   margin: 0 auto;
+}
+
+a {
+  cursor: pointer;
 }

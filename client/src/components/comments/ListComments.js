@@ -6,7 +6,7 @@ import FormatService from "../../services/FormatService";
 
 function ListComments({comments, parent = null}) {
     const {deleteComment,showEditComment,updateTextEditComment,cancelEditComment,editComment,showReplies,hideReply,updateNewReplyText,addComment,showOrHideNewReply} = useContext(CommentContext);
-    const session = useContext(SessionContext);
+    const {session} = useContext(SessionContext);
 
     return (
         <ul>
