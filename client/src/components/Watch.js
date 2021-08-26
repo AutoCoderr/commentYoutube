@@ -1,13 +1,15 @@
-import React,{useState,useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import useQuery from "../useQuery";
 import VideoService from "../services/VideoService";
 import {CommentProvider} from "../contexts/CommentContext";
 import '../css/watch.css';
 import Comments from "./comments/Comments";
 import FormatService from "../services/FormatService";
+import {SessionContext} from "../contexts/SessionContext";
 
 function Watch() {
     const [descriptionCollapsed, setDescriptionCollapsed] = useState(true);
+    const {session} = useContext(SessionContext);
 
 
     let YTVideoId = useQuery().get('v');
@@ -63,7 +65,7 @@ function Watch() {
                             }
                         </div>
                     </div>
-                    <CommentProvider>
+                    <CommentProvider session={session}>
                         <Comments/>
                     </CommentProvider>
                 </>

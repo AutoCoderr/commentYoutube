@@ -1,5 +1,6 @@
 import {useState,useCallback} from "react";
 import { useHistory } from "react-router-dom";
+import '../css/index.css';
 
 export default function Index() {
 	const [YTurl,setYTUrl] = useState("");
@@ -31,10 +32,10 @@ export default function Index() {
 	)
 
 	return (
-		<div>
+		<div className="videoUrl">
 			<label>Rentrez l'url d'une vidéo youtube :</label>
 			<input onKeyUp={onKeyUp} value={YTurl} onChange={handleYTURL} type="text" placeholder="ex : https://www.youtube.com/watch?v=12345678912"/>
-			<a className="go_button" onClick={goToYTVideo}>GO</a>
+			<a className="btn" onClick={goToYTVideo}>GO</a>
 			{
 				incorrectRegex &&
 				<div className="error">

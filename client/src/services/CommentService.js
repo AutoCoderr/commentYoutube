@@ -39,4 +39,16 @@ export default class CommentService {
             method: "DELETE"
         });
     }
+
+    static likeComment(commentId) {
+        return request(apiPath+'/like/'+commentId, {
+            method: "PUT"
+        })
+    }
+
+    static dislikeComment(commentId) {
+        return request(apiPath+'/dislike/'+commentId, {
+            method: "PUT"
+        })
+    }
 }

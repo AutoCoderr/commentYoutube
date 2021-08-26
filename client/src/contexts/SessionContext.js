@@ -49,7 +49,7 @@ export function SessionProvider({children}) {
             SessionService.testLogin()
                 .then(({session}) => session.token === curSession.token && setSession(session));
         } else {
-            connect();
+           connect();
         }
 
         SessionService.reConnect = callback => connect().then(session => callback(session));

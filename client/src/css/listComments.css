@@ -43,6 +43,10 @@ li {
 	margin-left: -100px;
 }
 
+.reacted {
+	filter: drop-shadow(0 0 2px black);
+}
+
 .likes_and_dislikes img {
 	width: 17px;
 	height: 17px;

@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../DB";
 import {IComment} from "./Comment";
+import {IReaction} from "./Reaction";
 
 const {DB_PREFIX} = process.env;
 
@@ -11,6 +12,7 @@ export interface IUser {
     firstname: string;
     lastname: string;
     Comments?: Array<IComment>;
+    Reactions?: Array<IReaction>;
     profile_pic_uri?: string;
 }
 
@@ -21,6 +23,7 @@ export default class User extends Model {
     public firstname!: string;
     public lastname!: string;
     public Comments?: Array<IComment>;
+    public Reactions?: Array<IReaction>;
     public profile_pic_uri?: string;
 }
 

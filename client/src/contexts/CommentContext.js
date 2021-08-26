@@ -4,7 +4,7 @@ import useQuery from "../useQuery";
 
 export const CommentContext = createContext();
 
-export function CommentProvider({children}) {
+export function CommentProvider({children, session}) {
     const [comments, setComments] = useState([]);
     const [totalCommentCount, setTotalCommentCount] = useState(0);
     const [nbCommentByPage,setNbCommentByPage] = useState(0);
@@ -27,7 +27,7 @@ export function CommentProvider({children}) {
                             ...reply,
                             createdAt: new Date(reply.createdAt),
                             updatedAt: new Date(reply.updatedAt),
-                            showMenu: false
+                            showMenu: false,
                         })),
                         showReplies: true
                     } :
@@ -91,6 +91,36 @@ export function CommentProvider({children}) {
         , [comments]
     )
 
+    const reactMapper = useCallback(
+        (comment,type) => {
+            const antiType = type === 'like' ? 'dislike' : 'like';
+            return {
+                ...comment,
+                [type+'d']: !comment[type+'d'],
+                [type+'s']: comment[type+'d'] ? comment[type+'s']-1 : comment[type+'s']+1,
+                [antiType+'d']: false,
+                [antiType+'s']: comment[antiType+'d'] ? comment[antiType+'s']-1 : comment[antiType+'s']
+            }
+        }
+        , []
+    )
+
+    const reactComment = useCallback(
+        (commentToReact,parent,type) => CommentService[type+"Comment"](commentToReact.id).then(_ =>
+            setComments(comments.map(comment =>
+                comment.id === parent ?
+                    {
+                        ...comment,
+                        replies: comment.replies.map(reply =>
+                            reply.id === commentToReact.id ? reactMapper(reply,type) : reply
+                        )
+                    } :
+                    comment.id === commentToReact.id ? reactMapper(comment,type) : comment
+            ))
+        )
+        , [comments]
+    )
+
     const updateTextEditComment = useCallback(
         (commentToEdit, textEdit, parent) => setComments(comments.map(comment =>
             comment.id === parent ?
@@ -147,7 +177,11 @@ export function CommentProvider({children}) {
                     newReplyText: "",
                     showNewReply: false,
                     showReplies: false,
-                    showMenu: false
+                    showMenu: false,
+                    likes: 0,
+                    liked: false,
+                    dislikes: 0,
+                    disliked: false
                 }, ...comments] :
                     comments.map(comment =>
                         comment.id === parent ?
@@ -159,6 +193,10 @@ export function CommentProvider({children}) {
                                 showNewReply: false,
                                 replies: [...comment.replies, {
                                     ...addedComment,
+                                    likes: 0,
+                                    liked: false,
+                                    dislikes: 0,
+                                    disliked: false,
                                     User: session,
                                     createdAt: new Date(addedComment.createdAt),
                                     updatedAt: new Date(addedComment.updatedAt)
@@ -205,27 +243,6 @@ export function CommentProvider({children}) {
                     ))
             ), [comments,totalCommentCount])
 
-    const getComments = useCallback(
-        (page = 1) => CommentService.getComments(ytvideo_id,page)
-            .then(res => setLoadingComments(false) |
-                setComments([...comments, ...res.comments.map(comment => ({
-                    ...comment,
-                    createdAt: new Date(comment.createdAt),
-                    updatedAt: new Date(comment.updatedAt),
-                    editing: false,
-                    textEdit: "",
-                    newReplyText: "",
-                    showNewReply: false,
-                    replies: [],
-                    showReplies: false,
-                    showMenu: false
-                }))]) |
-                (nbCommentByPage !== res.nbCommentByPage && setNbCommentByPage(res.nbCommentByPage)) |
-                (totalCommentCount !== res.count && setTotalCommentCount(res.count))
-            ),
-        [comments,totalCommentCount,nbCommentByPage]
-    )
-
     const showOrHideCommentMenu = useCallback(
         (commentToShowMenu,parent) => setComments(comments.map(comment =>
             comment.id === parent ?
@@ -248,16 +265,37 @@ export function CommentProvider({children}) {
         , [comments]
     )
 
+    const getComments = useCallback(
+        (page = 1,erase = false) => CommentService.getComments(ytvideo_id,page)
+            .then(res => setLoadingComments(false) |
+                setComments([...(erase ? [] : comments), ...res.comments.map(comment => ({
+                    ...comment,
+                    createdAt: new Date(comment.createdAt),
+                    updatedAt: new Date(comment.updatedAt),
+                    editing: false,
+                    textEdit: "",
+                    newReplyText: "",
+                    showNewReply: false,
+                    replies: [],
+                    showReplies: false,
+                    showMenu: false
+                }))]) |
+                (nbCommentByPage !== res.nbCommentByPage && setNbCommentByPage(res.nbCommentByPage)) |
+                (totalCommentCount !== res.count && setTotalCommentCount(res.count))
+            ),
+        [comments,totalCommentCount,nbCommentByPage]
+    )
+
     const displayMoreComments = useCallback(
         () => setLoadingComments(true) |
             getComments(Math.floor(comments.length/nbCommentByPage)+1),
         [comments,totalCommentCount,nbCommentByPage]
     )
 
-    useEffect(() => getComments(), []);
+    useEffect(() =>  session != null && getComments(1,true), [session]);
 
     return (
-        <CommentContext.Provider value={{comments,addComment,totalCommentCount,deleteComment,updateTextEditComment,showOrHideEditComment,editComment,showReplies,hideReply,updateNewReplyText,showOrHideNewReply,displayMoreComments,loadingComments,showOrHideCommentMenu}}>
+        <CommentContext.Provider value={{comments,addComment,totalCommentCount,deleteComment,updateTextEditComment,showOrHideEditComment,editComment,showReplies,hideReply,updateNewReplyText,showOrHideNewReply,displayMoreComments,loadingComments,showOrHideCommentMenu,reactComment}}>
             {children}
         </CommentContext.Provider>
     )

@@ -1,6 +1,6 @@
 import './App.css';
 import './css/navbar.css';
-import {BrowserRouter, Route} from "react-router-dom";
+import {BrowserRouter, Route, Link} from "react-router-dom";
 import React from "react";
 import {SessionProvider,SessionContext} from "./contexts/SessionContext";
 import Watch from "./components/Watch";
@@ -14,7 +14,7 @@ function App() {
             <header>
               <nav>
                   <div className="navbar-left-part">
-                      <a className="navbar-brand">Comment Youtube</a>
+                      <Link className="navbar-brand" to="/">Comment Youtube</Link>
                   </div>
                   <div className="navbar-right-part">
                       <ul className="navbar-menu">

@@ -10,7 +10,7 @@ import downChevron from '../../images/down-chevron.png';
 import FormatService from "../../services/FormatService";
 
 function ListComments({comments, parent = null}) {
-    const {deleteComment,showOrHideEditComment,updateTextEditComment,editComment,showReplies,hideReply,updateNewReplyText,addComment,showOrHideNewReply,showOrHideCommentMenu} = useContext(CommentContext);
+    const {deleteComment,showOrHideEditComment,updateTextEditComment,editComment,showReplies,hideReply,updateNewReplyText,addComment,showOrHideNewReply,showOrHideCommentMenu,reactComment} = useContext(CommentContext);
     const {session} = useContext(SessionContext);
 
     return (
@@ -55,14 +55,14 @@ function ListComments({comments, parent = null}) {
                             !comment.editing &&
                             <div className="comment_back">
                                 <div className="likes_and_dislikes">
-                                <span>
-                                    <img src={likeImg}/>
-                                    {comment.likes}
-                                </span>
-                                    <span>
-                                    <img src={dislikeImg}/>
+                                    <span onClick={() => reactComment(comment,parent,'like')}>
+                                    <img className={comment.liked ? 'reacted' : ''} src={likeImg}/>
+                                        {comment.likes}
+                                    </span>
+                                    <span onClick={() => reactComment(comment,parent,'dislike')}>
+                                        <img className={comment.disliked ? 'reacted' : ''} src={dislikeImg}/>
                                         {comment.dislikes}
-                                </span>
+                                    </span>
                                 </div>
                                 {
                                     parent == null &&
