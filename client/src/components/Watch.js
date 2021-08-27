@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import useQuery from "../useQuery";
 import VideoService from "../services/VideoService";
 import {CommentProvider} from "../contexts/CommentContext";
@@ -30,6 +30,20 @@ function Watch() {
         }
     }, [session])
 
+    const reactOneVideo = useCallback(
+        (type) => videoInfos && VideoService[type+'Video'](YTVideoId).then(() => {
+            const antiType = type === 'like' ? 'dislike' : 'like';
+            setVideoInfos({
+                ...videoInfos,
+                [type+'d']: !videoInfos[type+'d'],
+                [type+'s']: videoInfos[type+'d'] ? videoInfos[type+'s']-1 : videoInfos[type+'s']+1,
+                [antiType+'d']: false,
+                [antiType+'s']: videoInfos[antiType+'d'] ? videoInfos[antiType+'s']-1 : videoInfos[antiType+'s']
+            })
+        }),
+        [videoInfos]
+    )
+
     return (
         <div>
             {
@@ -49,11 +63,11 @@ function Watch() {
                                 { FormatService.formatViews(videoInfos.views)} vues
                             </span>
                             <div className="likes_and_dislikes">
-                                <span>
+                                <span onClick={() => reactOneVideo('like')}>
                                     <img className={videoInfos.liked ? 'reacted' : ''} src={likeImg}/>
                                         {videoInfos.likes}
                                     </span>
-                                <span>
+                                <span onClick={() => reactOneVideo('dislike')}>
                                     <img className={videoInfos.disliked ? 'reacted' : ''} src={dislikeImg}/>
                                     {videoInfos.dislikes}
                                 </span>
