@@ -1,14 +1,11 @@
 import {Router} from "express";
 import getYTVideo from "../lib/getYTVideo";
-import JWTMiddleWare from "../middlewares/JWTMiddleWare";
 import getOrCreateUser from "../lib/getOrCreateUser";
 import User from "../models/User";
-import Reaction, {IReaction} from "../models/Reaction";
+import Reaction from "../models/Reaction";
 import Comment from "../models/Comment";
 
 const CommentRouter = Router();
-
-CommentRouter.use(JWTMiddleWare);
 
 CommentRouter.get("/:ytvideo_id", (req, res) => {
     const nbCommentByPage = 50;

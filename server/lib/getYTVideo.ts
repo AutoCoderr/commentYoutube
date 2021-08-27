@@ -1,8 +1,19 @@
 import request from "./request";
+import Reaction from "../models/Reaction";
 
 const videosCache = {};
 
-export default async function getYTVideo(ytvideo_id) {
+export default async function getYTVideo(ytvideo_id): Promise<false|{title: string, views: string, author: string, channelId: string, description: string, reactions: Array<Reaction>}> {
+    if (videosCache[ytvideo_id] && (new Date().getTime()) - videosCache[ytvideo_id].date.getTime() < 1000*60*5) {
+        return {
+            ...videosCache[ytvideo_id].infos, reactions: await Reaction.findAll({
+                where: {YTVideo: ytvideo_id}
+            })
+        }
+    } else if (videosCache[ytvideo_id]) {
+        delete videosCache[ytvideo_id];
+    }
+
     const data = await request("https://www.youtube.com/watch?v="+ytvideo_id);
     let toFind = "ytInitialPlayerResponse";
     let i=0;
@@ -38,7 +49,12 @@ export default async function getYTVideo(ytvideo_id) {
                 description: json.videoDetails.shortDescription
             } :
             false;
-    } catch (e) {}
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
     videosCache[ytvideo_id] = {date: new Date(), infos};
-    return infos;
+    return {...infos, reactions: await Reaction.findAll({
+            where: {YTVideo: ytvideo_id}
+        })};
 }

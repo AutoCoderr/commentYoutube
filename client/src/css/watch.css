@@ -35,3 +35,24 @@
     font-weight: bold;
     text-align: left;
 }
+
+.likes_and_dislikes img {
+    width: 17px;
+    height: 17px;
+    margin: 0 5px -2px;
+}
+
+.likes_and_dislikes span {
+    margin: 0 7px;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 10px;
+}
+
+.likes_and_dislikes span:hover {
+    background-color: #b0bcff;
+}
+
+.reacted {
+    filter: drop-shadow(0 0 2px black);
+}

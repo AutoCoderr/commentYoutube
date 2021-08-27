@@ -6,6 +6,8 @@ import '../css/watch.css';
 import Comments from "./comments/Comments";
 import FormatService from "../services/FormatService";
 import {SessionContext} from "../contexts/SessionContext";
+import likeImg from "../images/like.png";
+import dislikeImg from "../images/dislike.png";
 
 function Watch() {
     const [descriptionCollapsed, setDescriptionCollapsed] = useState(true);
@@ -22,9 +24,11 @@ function Watch() {
     const [videoInfos,setVideoInfos] = useState(null)
 
     useEffect(() => {
-        VideoService.getYTVideo(YTVideoId)
-            .then(res => setVideoInfos(res))
-    }, [])
+        if (session != null) {
+            VideoService.getYTVideo(YTVideoId)
+                .then(res => setVideoInfos(res))
+        }
+    }, [session])
 
     return (
         <div>
@@ -44,6 +48,16 @@ function Watch() {
                             <span>
                                 { FormatService.formatViews(videoInfos.views)} vues
                             </span>
+                            <div className="likes_and_dislikes">
+                                <span>
+                                    <img className={videoInfos.liked ? 'reacted' : ''} src={likeImg}/>
+                                        {videoInfos.likes}
+                                    </span>
+                                <span>
+                                    <img className={videoInfos.disliked ? 'reacted' : ''} src={dislikeImg}/>
+                                    {videoInfos.dislikes}
+                                </span>
+                            </div>
                             <span>
                                 <a target="_blank" href={"https://www.youtube.com/watch?v="+YTVideoId}>Aller sur youtube</a>
                             </span>
