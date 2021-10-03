@@ -1,11 +1,27 @@
 version: "3.4"
 services:
+
+  client:
+    image: node:14
+    volumes:
+    - ./client:/client
+    working_dir: /client
+    command: npm start
+    ports:
+    - '3000:3000'
+    networks:
+      - exterior
+
   server:
+    depends_on:
+      - db
     image: node:14
     volumes:
     - ./server:/server
     working_dir: /server
-    command: npm start
+    command: npm run watch
+    ports:
+    - '3001:81'
     env_file:
       - .env
     networks:
@@ -18,6 +34,10 @@ services:
       - db_data:/var/lib/postgresql/data:rw
     env_file:
       - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
       - '5432:5432'
     networks:

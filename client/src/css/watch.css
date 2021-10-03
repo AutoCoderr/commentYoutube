@@ -1,0 +1,58 @@
+.video-display iframe {
+    height: 500px;
+    width: 70%;
+}
+
+.video-infos {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.description {
+    text-align: left;
+    width: 70%;
+    margin: 20px auto 0;
+    height: 100%;
+}
+.description p {
+    overflow: hidden;
+}
+.description p.collapsed {
+    height: 75px;
+}
+
+.show-description-button {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.show-description-button:hover {
+    color: black;
+    font-weight: bold;
+    text-align: left;
+}
+
+.likes_and_dislikes img {
+    width: 17px;
+    height: 17px;
+    margin: 0 5px -2px;
+}
+
+.likes_and_dislikes span {
+    margin: 0 7px;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 10px;
+}
+
+.likes_and_dislikes span:hover {
+    background-color: #b0bcff;
+}
+
+.reacted {
+    filter: drop-shadow(0 0 2px black);
+}

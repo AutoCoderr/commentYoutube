@@ -1,0 +1,12 @@
+body {
+  text-align: center;
+  background-color: #d7ddff;
+}
+
+body, main * {
+  margin: 0 auto;
+}
+
+a {
+  cursor: pointer;
+}

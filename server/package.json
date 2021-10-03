@@ -5,7 +5,7 @@
   "main": "serv.js",
   "scripts": {
     "start": "npx tsc && node --trace-warnings serv.js",
-    "watch": "npx tsc -w",
+    "watch": "npx tsc -w | nodemon serv.js",
     "build": "npx tsc"
   },
   "repository": {
@@ -19,9 +19,13 @@
   },
   "homepage": "https://github.com/AutoCoderr/commentYoutube#readme",
   "dependencies": {
+    "@types/node": "^16.3.2",
     "express": "^4.17.1",
+    "pg": "^8.6.0",
     "sequelize": "^6.6.5",
-    "pg": "^8.6.0"
+    "nodemon": "^2.0.12",
+    "jsonwebtoken": "^8.5.1",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "typescript": "^4.3.5"

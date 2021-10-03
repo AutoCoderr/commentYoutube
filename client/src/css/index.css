@@ -1,0 +1,12 @@
+.videoUrl {
+	margin-top: 20px;
+}
+
+.videoUrl input {
+	width: 30%;
+}
+
+.videoUrl .btn {
+	margin-left: 10px;
+	width: 10%;
+}
